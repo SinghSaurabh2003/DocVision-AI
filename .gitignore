@@ -1,0 +1,90 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ==========================
+# Virtual Environment
+# ==========================
+.venv/
+venv/
+env/
+ENV/
+testenv/
+
+# ==========================
+# Jupyter Notebook
+# ==========================
+.ipynb_checkpoints/
+
+# Ignore temporary notebooks
+Untitled*.ipynb
+
+# ==========================
+# Dataset
+# ==========================
+data/
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Image datasets
+*.tif
+*.tiff
+*.jpg
+*.jpeg
+*.png
+
+# ==========================
+# Model Checkpoints
+# ==========================
+checkpoints/
+*.pth
+*.pt
+*.ckpt
+
+# ==========================
+# Logs
+# ==========================
+*.log
+
+# ==========================
+# VS Code
+# ==========================
+.vscode/
+
+# ==========================
+# PyCharm
+# ==========================
+.idea/
+
+# ==========================
+# Operating System
+# ==========================
+.DS_Store
+Thumbs.db
+
+# ==========================
+# Build / Cache
+# ==========================
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.cache/
+
+# ==========================
+# TensorBoard
+# ==========================
+runs/
+events.out.tfevents*
+
+# ==========================
+# Temporary files
+# ==========================
+*.tmp
+*.bak
