@@ -19,8 +19,7 @@ testenv/
 # ==========================
 .ipynb_checkpoints/
 
-# Ignore temporary notebooks
-Untitled*.ipynb
+
 
 # ==========================
 # Dataset
