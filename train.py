@@ -13,10 +13,10 @@ from src.config import (
     EPOCHS,
     LEARNING_RATE,
     WEIGHT_DECAY,
-    NUM_CLASSES,
     SEED,
     CHECKPOINT_DIR,
     BEST_MODEL_NAME,
+    LAST_MODEL_NAME,
 )
 
 from src.dataset import RVLCDIPDataset
@@ -31,16 +31,14 @@ def main():
     # Device
     # -------------------------------------------------
 
-    device = torch.device(
-        "cuda" if torch.cuda.is_available() else "cpu"
-    )
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     print("=" * 60)
     print(f"Using Device : {device}")
     print("=" * 60)
 
     # -------------------------------------------------
-    # Image Transform
+    # Transform
     # -------------------------------------------------
 
     transform = transforms.Compose([
@@ -61,7 +59,7 @@ def main():
     print(f"Classes : {dataset.classes}")
 
     # -------------------------------------------------
-    # DataLoaders
+    # DataLoader
     # -------------------------------------------------
 
     train_loader, val_loader = get_dataloaders(
@@ -79,12 +77,10 @@ def main():
     # Model
     # -------------------------------------------------
 
-    model = build_model()
-
-    model = model.to(device)
+    model = build_model().to(device)
 
     # -------------------------------------------------
-    # Loss Function
+    # Loss
     # -------------------------------------------------
 
     criterion = nn.CrossEntropyLoss()
@@ -111,18 +107,70 @@ def main():
     )
 
     # -------------------------------------------------
-    # Checkpoint Folder
+    # Checkpoints
     # -------------------------------------------------
 
     os.makedirs(CHECKPOINT_DIR, exist_ok=True)
 
+    best_checkpoint = os.path.join(
+        CHECKPOINT_DIR,
+        BEST_MODEL_NAME
+    )
+
+    last_checkpoint = os.path.join(
+        CHECKPOINT_DIR,
+        LAST_MODEL_NAME
+    )
+
+    start_epoch = 0
     best_acc = 0.0
 
     # -------------------------------------------------
-    # Training Loop
+    # Resume Training
     # -------------------------------------------------
 
-    for epoch in range(EPOCHS):
+    checkpoint_path = None
+
+    if os.path.exists(last_checkpoint):
+        checkpoint_path = last_checkpoint
+        print("=" * 60)
+        print("Resuming from LAST checkpoint")
+        print("=" * 60)
+
+    elif os.path.exists(best_checkpoint):
+        checkpoint_path = best_checkpoint
+        print("=" * 60)
+        print("LAST checkpoint not found.")
+        print("Resuming from BEST checkpoint")
+        print("=" * 60)
+
+    if checkpoint_path is not None:
+
+        checkpoint = torch.load(
+            checkpoint_path,
+            map_location=device
+        )
+
+        model.load_state_dict(
+            checkpoint["model_state_dict"]
+        )
+
+        optimizer.load_state_dict(
+            checkpoint["optimizer_state_dict"]
+        )
+
+        start_epoch = checkpoint["epoch"]
+
+        best_acc = checkpoint["best_accuracy"]
+
+        print(f"Starting from Epoch {start_epoch + 1}")
+        print(f"Best Accuracy : {best_acc:.2f}%")
+
+    # -------------------------------------------------
+    # Training
+    # -------------------------------------------------
+
+    for epoch in range(start_epoch, EPOCHS):
 
         print("\n" + "=" * 60)
         print(f"Epoch {epoch+1}/{EPOCHS}")
@@ -145,12 +193,12 @@ def main():
 
         scheduler.step(val_acc)
 
-        print(f"\nTrain Loss : {train_loss:.4f}")
-        print(f"Train Acc  : {train_acc:.2f}%")
-        print(f"Val Loss   : {val_loss:.4f}")
-        print(f"Val Acc    : {val_acc:.2f}%")
-
         current_lr = optimizer.param_groups[0]["lr"]
+
+        print(f"\nTrain Loss : {train_loss:.4f}")
+        print(f"Train Accuracy : {train_acc:.2f}%")
+        print(f"Validation Loss : {val_loss:.4f}")
+        print(f"Validation Accuracy : {val_acc:.2f}%")
         print(f"Learning Rate : {current_lr:.6f}")
 
         # ---------------------------------------------
@@ -168,16 +216,27 @@ def main():
                     "optimizer_state_dict": optimizer.state_dict(),
                     "best_accuracy": best_acc,
                 },
-                os.path.join(
-                    CHECKPOINT_DIR,
-                    BEST_MODEL_NAME
-                )
+                best_checkpoint
             )
 
-            print("\n✅ Best model saved.")
+            print("\n✅ Best Model Saved!")
+
+        # ---------------------------------------------
+        # Save Latest Checkpoint
+        # ---------------------------------------------
+
+        torch.save(
+            {
+                "epoch": epoch + 1,
+                "model_state_dict": model.state_dict(),
+                "optimizer_state_dict": optimizer.state_dict(),
+                "best_accuracy": best_acc,
+            },
+            last_checkpoint
+        )
 
     print("\n" + "=" * 60)
-    print("Training Completed")
+    print("Training Finished")
     print(f"Best Validation Accuracy : {best_acc:.2f}%")
     print("=" * 60)
 
