@@ -1,7 +1,7 @@
 import torch.nn as nn
 from torchvision.models import resnet18, ResNet18_Weights
 
-from src.config import NUM_CLASSES
+from src.config_v2 import NUM_CLASSES
 
 
 def build_model():
