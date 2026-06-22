@@ -44,8 +44,11 @@ def main():
     transform = transforms.Compose([
         transforms.Resize((IMAGE_SIZE, IMAGE_SIZE)),
         transforms.ToTensor(),
+        transforms.Normalize(
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
     ])
-
     # -------------------------------------------------
     # Dataset
     # -------------------------------------------------
@@ -83,7 +86,9 @@ def main():
     # Loss
     # -------------------------------------------------
 
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(
+        label_smoothing=0.1
+    )
 
     # -------------------------------------------------
     # Optimizer
