@@ -1,5 +1,5 @@
 # Dataset 
-DATASET_PATH = "/content/data/Training_half" 
+DATASET_PATH = "/kaggle/input/datasets/singhsaurabh03/training-half/Training_half" 
 
 # Image 
 IMAGE_SIZE = 224 
@@ -21,6 +21,6 @@ NUM_CLASSES = 9
 SEED = 42 
 
 # Save 
-CHECKPOINT_DIR = "/content/drive/MyDrive/Document-Type-Classifier/checkpoints" 
+CHECKPOINT_DIR = "/kaggle/working/checkpoints" 
 BEST_MODEL_NAME = "best_model.pth" 
 LAST_MODEL_NAME = "last_model.pth"
