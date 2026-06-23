@@ -17,6 +17,12 @@ CHECKPOINT_PATH = "/kaggle/working/Document-Type-Classifier/checkpoints/best_mod
 
 IMAGE_PATH = "/kaggle/input/datasets/singhsaurabh03/testing/test/invoice/invoice0.tif"
 
+# Change this according to your environment
+
+#CHECKPOINT_PATH = "/content/drive/MyDrive/Document-Type-Classifier/checkpoints/best_model.pth"
+
+#IMAGE_PATH = "/content/data/test/invoice/0000023361.tif"
+
 # =====================================================
 # DEVICE
 # =====================================================
