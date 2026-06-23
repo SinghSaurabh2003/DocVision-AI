@@ -35,7 +35,7 @@ TEST_DATASET_PATH = "/kaggle/input/datasets/singhsaurabh03/testing/test"
 
 CHECKPOINT_PATH = "/kaggle/input/datasets/singhsaurabh03/checkpoints/best_model.pth"
 
-RESULTS_DIR = "results/ptyg"
+RESULTS_DIR = "/kaggle/working/Document-Type-Classifier/results"
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
