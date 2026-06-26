@@ -73,7 +73,7 @@ st.sidebar.write("### Framework")
 st.sidebar.success("PyTorch")
 
 st.sidebar.write("### Best Validation Accuracy")
-st.sidebar.success("91.83%")
+st.sidebar.success("95.98%")
 
 st.sidebar.write("### Device")
 st.sidebar.info(device)
